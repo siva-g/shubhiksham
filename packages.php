@@ -209,8 +209,6 @@ require 'header.php';
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-lg-offset-3 col-lg-6">
                 <div class="pricing-box-alt special">
                     <div class="pricing-heading">
@@ -247,15 +245,6 @@ require 'header.php';
             </div>
         </div>
     </div>
-    <!-- divider -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="solidline">
-            </div>
-        </div>
-    </div>
-    <!-- end divider -->        
-</div>
 </section>
 
 <?php require 'footer.php'; ?>

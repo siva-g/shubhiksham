@@ -66,86 +66,85 @@
         </style>
 
     </head>
-
-    <body>
-
-        <header>
-            <div class="top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="topleft-info">
-                                <li><i class="fa fa-map-marker"></i> A7/1C Vasantha Malaigai | 80 Feet Road | Madurai-20</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="pull-right">
-                                <?php if (isset($_SESSION['userDetails'])) { ?>
-                                    <a href="logout.php" class="btn btn-theme btn-large">Logout</a>
-                                <?php } else { ?>
-                                    <form method="POST" enctype="multipart/form-data" id="LoginForm" action="login.php" class="form-inline">
-                                        <div class="form-group row">
-                                            <input id="LogEmail" class="form-control" placeholder="Email" type="text" value="" name="email" />
-                                            <input id="LogPassword" class="form-control" placeholder="Password" type="password" value="" name="password" />
-                                        </div>
-                                        <input class="btn btn-theme" type="submit" value="Login" name="login">
-                                    </form>
-                                <?php } ?>
+    <body <?php echo strpos($_SERVER['PHP_SELF'], "packages.php") && isset($_SESSION['userDetails']) ? 'onload="submitPayuForm()"' : '' ?>>
+        <div id="wrapper">
+            <header>
+                <div class="top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="topleft-info">
+                                    <li><i class="fa fa-map-marker"></i> A7/1C Vasantha Malaigai | 80 Feet Road | Madurai-20</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pull-right">
+                                    <?php if (isset($_SESSION['userDetails'])) { ?>
+                                        <a href="logout.php" class="btn btn-theme btn-large">Logout</a>
+                                    <?php } else { ?>
+                                        <form method="POST" enctype="multipart/form-data" id="LoginForm" action="login.php" class="form-inline">
+                                            <div class="form-group row">
+                                                <input id="LogEmail" class="form-control" placeholder="Email" type="text" value="" name="email" />
+                                                <input id="LogPassword" class="form-control" placeholder="Password" type="password" value="" name="password" />
+                                            </div>
+                                            <input class="btn btn-theme" type="submit" value="Login" name="login">
+                                        </form>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="navbar navbar-default navbar-static-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="index.php">
-                            <img src="images/logobig.png" alt="logo" width="199" height="52" />
-                        </a>
-                    </div>
-                    <div class="navbar-collapse collapse ">
-                        <ul class="nav navbar-nav">
-                            <?php
-                            if (isset($_SESSION['userDetails'])) {
-                                $regProfUrl = "profile.php";
-                                $regProfText = "Profile";
-                                $logInOutUrl = "logout.php";
-                                $logInOutText = "Logout";
-                            } else {
-                                $regProfUrl = "register.php";
-                                $regProfText = "Register";
-                                $logInOutUrl = "login.php";
-                                $logInOutText = "Login";
-                            }
-                            ?>
+                <div class="navbar navbar-default navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="index.php">
+                                <img src="images/logobig.png" alt="logo" width="199" height="52" />
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse ">
                             <ul class="nav navbar-nav">
-                                <li>
-                                    <a href="index.php">Home</a>
-                                </li>
-                                <li>
-                                    <a href="search.php">Search</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo $regProfUrl; ?>"><?php echo $regProfText; ?></a>
-                                </li>
-                                <li>
-                                    <a href="#">About</a>
-                                </li>
-                                <li>
-                                    <a href="#">Services</a>
-                                </li>
-                                <li>
-                                    <a href="packages.php">Packages</a>
-                                </li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
+                                <?php
+                                if (isset($_SESSION['userDetails'])) {
+                                    $regProfUrl = "profile.php";
+                                    $regProfText = "Profile";
+                                    $logInOutUrl = "logout.php";
+                                    $logInOutText = "Logout";
+                                } else {
+                                    $regProfUrl = "register.php";
+                                    $regProfText = "Register";
+                                    $logInOutUrl = "login.php";
+                                    $logInOutText = "Login";
+                                }
+                                ?>
+                                <ul class="nav navbar-nav">
+                                    <li>
+                                        <a href="index.php">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="search.php">Search</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo $regProfUrl; ?>"><?php echo $regProfText; ?></a>
+                                    </li>
+                                    <li>
+                                        <a href="#">About</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Services</a>
+                                    </li>
+                                    <li>
+                                        <a href="packages.php">Packages</a>
+                                    </li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
