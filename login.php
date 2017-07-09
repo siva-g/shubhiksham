@@ -7,6 +7,10 @@ if (isset($_SESSION['userDetails'])) {
     header('Location:search.php?page=1');
 }
 
+if (!isset($_POST['login'])) {
+    header('Location:index.php');
+}
+
 if (isset($_POST['login'])) {
 
     // Receive and sanitize input
@@ -30,7 +34,5 @@ if (isset($_POST['login'])) {
 //        echo mysqli_error();
         exit;
     }
-} else {
-    header('Location:index.php');
 }
 ?>

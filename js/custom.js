@@ -26,7 +26,9 @@ jQuery(document).ready(function ($) {
 
     // validate signup form on keyup and submit
     $("#signupForm").validate({
-        errorLabelContainer: "#Loginerror",
+        submitHandler: function (form) {
+            form.submit();
+        },
         rules: {
             profile_for: "required",
             name: "required",
@@ -90,6 +92,9 @@ jQuery(document).ready(function ($) {
     });
 
     $('#LoginForm').validate({
+        submitHandler: function (form) {
+            form.submit();
+        },
         rules: {
             email: {
                 required: true,
