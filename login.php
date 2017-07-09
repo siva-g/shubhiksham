@@ -19,7 +19,7 @@ if (isset($_POST['login'])) {
         $users = $result->fetch_assoc();
         if ($users['status'] == 1) {
             $_SESSION['userDetails'] = $users;
-            $msg->success('Successfully Logged in!', "search.php?page=1");
+            header('Location:search.php?page=1');
         } elseif ($users['status'] == 0 && $users['act_key'] == NULL) {
             $msg->info("Your account was Deactivated. Please contact Administrator.", "index.php");
         } elseif ($users['status'] == 0 && $users['act_key'] != NULL) {

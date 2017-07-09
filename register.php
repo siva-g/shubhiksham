@@ -1,9 +1,14 @@
 <?php
+
 require './front_connection.php';
 /* * *********Above code default in all pages*********** */
 
 if (isset($_SESSION['userDetails'])) {
-    header('Location:search.php');
+    header('Location:search.php?page=1');
+}
+
+if (!isset($_GET["actkey"]) && !isset($_POST['register'])) {
+    header('Location:index.php');
 }
 
 if (isset($_GET["actkey"])) {
@@ -92,9 +97,7 @@ if (isset($_POST['register'])) {
         $mail->Body = $message;
 
         $mail->send();
-//        echo '<pre>';
-//        print_r($mail->ErrorInfo);
-//        exit;
+
         $msg->success('Registration Successfull!');
         $msg->info('Please check your inbox to activate the account on Shubhiksham Matrimony.', "index.php");
     } else {
@@ -102,60 +105,4 @@ if (isset($_POST['register'])) {
         exit;
     }
 }
-
-require 'header.php';
 ?>
-
-<div class="container">        
-
-    <div class="row">
-        <div class="box">
-            <div class="col-lg-offset-3 col-lg-6">
-                <?php $msg->display(); ?>
-                <hr>
-                <h2 class="intro-text text-center">Register
-                    <strong>form</strong>
-                </h2>
-                <hr>
-                <p>Welcome! Let's start your partner search with this Sign up.</p>
-                <form role="form" method="POST" action="" enctype="multipart/form-data" id="signupForm">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label>Name</label>
-                            <input autocomplete="off" type="text" class="form-control input-lg" name="name">
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Email Address</label>
-                            <input autocomplete="off" id="Email" type="email" class="form-control input-lg" name="email">
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Phone Number</label>
-                            <input autocomplete="off" id="Phone" type="tel" class="form-control input-lg" name="phone">
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Password</label>
-                            <input autocomplete="off" type="password" class="form-control input-lg" name="password">
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Date of Birth</label>
-                            <input readonly="readonly" autocomplete="off" type="text" class="form-control input-lg" name="dob" id="DOB">
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Gender</label>
-                            <select class="form-control input-lg" name="gender">
-                                <option value="1">Male</option>
-                                <option value="2">Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <button type="submit" class="btn btn-default btn-lg btn-success" name="register">Register</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-</div>
-<!-- /.container -->
-<?php require 'footer.php'; ?>
