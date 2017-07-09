@@ -87,7 +87,7 @@
                                                 <input id="LogEmail" class="form-control" placeholder="Email" type="text" value="" name="email" />
                                                 <input id="LogPassword" class="form-control" placeholder="Password" type="password" value="" name="password" />
                                             </div>
-                                            <input class="btn btn-theme" type="submit" value="Login" name="login">
+                                            <input class="btn btn-theme" type="submit" value="Login" name="login" />
                                         </form>
                                     <?php } ?>
                                 </div>
