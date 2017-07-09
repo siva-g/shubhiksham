@@ -1,16 +1,13 @@
 <?php
 require './front_connection.php';
 /* * *********Above code default in all pages*********** */
-
-//echo '<pre>';
-//print_r($_SERVER);
-//exit;
+$isLoggedIn = false;
 
 $merchant_key = "gtKFFx";
 $salt = "eCwWELxi";
 $payu_base_url = "https://test.payu.in"; // For Test environment
 $action = '';
-$currentDir = "http://{$_SERVER['SERVER_NAME']}/shubhiksha_27062017/";
+$currentDir = "http://{$_SERVER['SERVER_NAME']}/shubhiksham/";
 $posted = array();
 if (!empty($_POST)) {
     foreach ($_POST as $key => $value) {
@@ -26,6 +23,7 @@ if (empty($posted['txnid'])) {
 }
 
 $hash = '';
+//$hashSequence = "udf10|udf9|udf8|udf7|udf6|udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key";
 $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
 $formName = isset($_POST['plan1']) ? "plan1Form" : (isset($_POST['plan2']) ? "plan2Form" : (isset($_POST['plan3']) ? "plan3Form" : (isset($_POST['plan4']) ? "plan4Form" : (isset($_POST['plan5']) ? "plan5Form" : "dummyForm"))));
 if (empty($posted['hash']) && sizeof($posted) > 0) {
@@ -41,6 +39,36 @@ if (empty($posted['hash']) && sizeof($posted) > 0) {
 } elseif (!empty($posted['hash'])) {
     $hash = $posted['hash'];
     $action = $payu_base_url . '/_payment';
+}
+
+if (isset($_SESSION['userDetails'])) {
+    $isLoggedIn = true;
+    $name = $_SESSION['userDetails']['name'];
+    $email = $_SESSION['userDetails']['email'];
+    $phone = $_SESSION['userDetails']['phone'];
+    $userid = $_SESSION['userDetails']['sno'];
+}
+
+$form = [
+    ['formname' => 'plan1Form', 'amount' => '500', 'productinfo' => 'Plan-20-Rs500', 'udf2' => 30, 'subname' => 'plan1'],
+    ['formname' => 'plan2Form', 'amount' => '1000', 'productinfo' => 'Plan-50-Rs1000', 'udf2' => 90, 'subname' => 'plan2'],
+    ['formname' => 'plan3Form', 'amount' => '2000', 'productinfo' => 'Plan-100-Rs2000', 'udf2' => 180, 'subname' => 'plan3'],
+    ['formname' => 'plan4Form', 'amount' => '5000', 'productinfo' => 'Plan-200-Rs5000', 'udf2' => 270, 'subname' => 'plan4'],
+    ['formname' => 'plan5Form', 'amount' => '10000', 'productinfo' => 'Plan-Unlimited-Rs10000', 'udf2' => 1080, 'subname' => 'plan5']
+];
+
+foreach ($form as $val) {
+    if ($isLoggedIn) {
+        $formInput = ['key' => $merchant_key, 'hash' => $hash, 'txnid' => $txnid, 'amount' => $val['amount'], 'productinfo' => $val['productinfo'], 'firstname' => $name, 'email' => $email, 'phone' => $phone, 'udf1' => $userid, 'udf2' => $val['udf2'], 'surl' => $currentDir . 'success.php', 'furl' => $currentDir . 'failure.php', 'curl' => $currentDir . 'cancel.php', 'service_provider' => ''];
+        $forms[$val['formname']] = '<form action="' . $action . '" name="' . $val['formname'] . '" method="POST">';
+        foreach ($formInput as $ikey => $ivalue) {
+            $forms[$val['formname']] .= '<input type="hidden" name="' . $ikey . '" value="' . $ivalue . '" />';
+        }
+        $forms[$val['formname']] .= '<input type="submit" name="' . $val['subname'] . '" class="btn btn-medium btn-theme" value="Pay now"/>'
+                . '</form>';
+    } else {
+        $forms[$val['formname']] = '<a href="index.php" class="btn btn-medium btn-theme">Login/Register</a>';
+    }
 }
 
 require 'header.php';
@@ -90,20 +118,7 @@ require 'header.php';
                         </ul>
                     </div>
                     <div class="pricing-action">
-                        <form action="<?php echo $action; ?>" name="plan1Form" method="POST">
-                            <input type="hidden" name="key" value="<?php echo $merchant_key ?>" />
-                            <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-                            <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
-                            <input type="hidden" name="amount" value="<?php echo (empty($posted['amount'])) ? '500' : $posted['amount'] ?>" />
-                            <input type="hidden" name="firstname" id="firstname" value="<?php echo (empty($posted['firstname'])) ? '' : $posted['firstname']; ?>" />
-                            <input type="hidden" name="email" id="email" value="<?php echo (empty($posted['email'])) ? '' : $posted['email']; ?>" />
-                            <input type="hidden" name="phone" value="<?php echo (empty($posted['phone'])) ? '' : $posted['phone']; ?>" />
-                            <input type="hidden" name="surl" value="<?php echo (empty($posted['surl'])) ? $currentDir . 'success.php' : $posted['surl'] ?>" />
-                            <input type="hidden" name="furl" value="<?php echo (empty($posted['furl'])) ? $currentDir . 'failure.php' : $posted['furl'] ?>" />
-                            <input type="hidden" name="curl" value="<?php echo (empty($posted['curl'])) ? $currentDir . 'cancel.php' : $posted['curl'] ?>" />
-                            <input type="hidden" name="service_provider" value="" />
-                            <input type="submit" name="plan1" class="btn btn-medium btn-theme" value="Pay now"/>
-                        </form>
+                        <?php echo $forms['plan1Form']; ?>
                     </div>
                 </div>
             </div>
@@ -124,20 +139,7 @@ require 'header.php';
                         </ul>
                     </div>
                     <div class="pricing-action">
-                        <form action="<?php echo $action; ?>" name="plan2Form" method="POST">
-                            <input type="hidden" name="key" value="<?php echo $merchant_key ?>" />
-                            <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-                            <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
-                            <input type="hidden" name="amount" value="<?php echo (empty($posted['amount'])) ? '500' : $posted['amount'] ?>" />
-                            <input type="hidden" name="firstname" id="firstname" value="<?php echo (empty($posted['firstname'])) ? '' : $posted['firstname']; ?>" />
-                            <input type="hidden" name="email" id="email" value="<?php echo (empty($posted['email'])) ? '' : $posted['email']; ?>" />
-                            <input type="hidden" name="phone" value="<?php echo (empty($posted['phone'])) ? '' : $posted['phone']; ?>" />
-                            <input type="hidden" name="surl" value="<?php echo (empty($posted['surl'])) ? $currentDir . 'success.php' : $posted['surl'] ?>" />
-                            <input type="hidden" name="furl" value="<?php echo (empty($posted['furl'])) ? $currentDir . 'failure.php' : $posted['furl'] ?>" />
-                            <input type="hidden" name="curl" value="<?php echo (empty($posted['curl'])) ? $currentDir . 'cancel.php' : $posted['curl'] ?>" />
-                            <input type="hidden" name="service_provider" value="" />
-                            <input type="submit" name="plan2" class="btn btn-medium btn-theme" value="Pay now"/>
-                        </form>
+                        <?php echo $forms['plan2Form']; ?>
                     </div>
                 </div>
             </div>
@@ -158,20 +160,7 @@ require 'header.php';
                         </ul>
                     </div>
                     <div class="pricing-action">
-                        <form action="<?php echo $action; ?>" name="plan3Form" method="POST">
-                            <input type="hidden" name="key" value="<?php echo $merchant_key ?>" />
-                            <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-                            <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
-                            <input type="hidden" name="amount" value="<?php echo (empty($posted['amount'])) ? '500' : $posted['amount'] ?>" />
-                            <input type="hidden" name="firstname" id="firstname" value="<?php echo (empty($posted['firstname'])) ? '' : $posted['firstname']; ?>" />
-                            <input type="hidden" name="email" id="email" value="<?php echo (empty($posted['email'])) ? '' : $posted['email']; ?>" />
-                            <input type="hidden" name="phone" value="<?php echo (empty($posted['phone'])) ? '' : $posted['phone']; ?>" />
-                            <input type="hidden" name="surl" value="<?php echo (empty($posted['surl'])) ? $currentDir . 'success.php' : $posted['surl'] ?>" />
-                            <input type="hidden" name="furl" value="<?php echo (empty($posted['furl'])) ? $currentDir . 'failure.php' : $posted['furl'] ?>" />
-                            <input type="hidden" name="curl" value="<?php echo (empty($posted['curl'])) ? $currentDir . 'cancel.php' : $posted['curl'] ?>" />
-                            <input type="hidden" name="service_provider" value="" />
-                            <input type="submit" name="plan3" class="btn btn-medium btn-theme" value="Pay now"/>
-                        </form>
+                        <?php echo $forms['plan3Form']; ?>
                     </div>
                 </div>
             </div>
@@ -192,20 +181,7 @@ require 'header.php';
                         </ul>
                     </div>
                     <div class="pricing-action">
-                        <form action="<?php echo $action; ?>" name="plan4Form" method="POST">
-                            <input type="hidden" name="key" value="<?php echo $merchant_key ?>" />
-                            <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-                            <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
-                            <input type="hidden" name="amount" value="<?php echo (empty($posted['amount'])) ? '500' : $posted['amount'] ?>" />
-                            <input type="hidden" name="firstname" id="firstname" value="<?php echo (empty($posted['firstname'])) ? '' : $posted['firstname']; ?>" />
-                            <input type="hidden" name="email" id="email" value="<?php echo (empty($posted['email'])) ? '' : $posted['email']; ?>" />
-                            <input type="hidden" name="phone" value="<?php echo (empty($posted['phone'])) ? '' : $posted['phone']; ?>" />
-                            <input type="hidden" name="surl" value="<?php echo (empty($posted['surl'])) ? $currentDir . 'success.php' : $posted['surl'] ?>" />
-                            <input type="hidden" name="furl" value="<?php echo (empty($posted['furl'])) ? $currentDir . 'failure.php' : $posted['furl'] ?>" />
-                            <input type="hidden" name="curl" value="<?php echo (empty($posted['curl'])) ? $currentDir . 'cancel.php' : $posted['curl'] ?>" />
-                            <input type="hidden" name="service_provider" value="" />
-                            <input type="submit" name="plan4" class="btn btn-medium btn-theme" value="Pay now"/>
-                        </form>
+                        <?php echo $forms['plan4Form']; ?>
                     </div>
                 </div>
             </div>
@@ -226,20 +202,7 @@ require 'header.php';
                         </ul>
                     </div>
                     <div class="pricing-action">
-                        <form action="<?php echo $action; ?>" name="plan5Form" method="POST">
-                            <input type="hidden" name="key" value="<?php echo $merchant_key ?>" />
-                            <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-                            <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
-                            <input type="hidden" name="amount" value="<?php echo (empty($posted['amount'])) ? '500' : $posted['amount'] ?>" />
-                            <input type="hidden" name="firstname" id="firstname" value="<?php echo (empty($posted['firstname'])) ? '' : $posted['firstname']; ?>" />
-                            <input type="hidden" name="email" id="email" value="<?php echo (empty($posted['email'])) ? '' : $posted['email']; ?>" />
-                            <input type="hidden" name="phone" value="<?php echo (empty($posted['phone'])) ? '' : $posted['phone']; ?>" />
-                            <input type="hidden" name="surl" value="<?php echo (empty($posted['surl'])) ? $currentDir . 'success.php' : $posted['surl'] ?>" />
-                            <input type="hidden" name="furl" value="<?php echo (empty($posted['furl'])) ? $currentDir . 'failure.php' : $posted['furl'] ?>" />
-                            <input type="hidden" name="curl" value="<?php echo (empty($posted['curl'])) ? $currentDir . 'cancel.php' : $posted['curl'] ?>" />
-                            <input type="hidden" name="service_provider" value="" />
-                            <input type="submit" name="plan5" class="btn btn-medium btn-theme" value="Pay now"/>
-                        </form>
+                        <?php echo $forms['plan5Form']; ?>
                     </div>
                 </div>
             </div>
