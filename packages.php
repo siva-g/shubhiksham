@@ -50,11 +50,11 @@ if (isset($_SESSION['userDetails'])) {
 }
 
 $form = [
-    ['formname' => 'plan1Form', 'amount' => '500', 'productinfo' => 'Plan-20-Rs500', 'udf2' => 30, 'subname' => 'plan1'],
-    ['formname' => 'plan2Form', 'amount' => '1000', 'productinfo' => 'Plan-50-Rs1000', 'udf2' => 90, 'subname' => 'plan2'],
-    ['formname' => 'plan3Form', 'amount' => '2000', 'productinfo' => 'Plan-100-Rs2000', 'udf2' => 180, 'subname' => 'plan3'],
-    ['formname' => 'plan4Form', 'amount' => '5000', 'productinfo' => 'Plan-200-Rs5000', 'udf2' => 270, 'subname' => 'plan4'],
-    ['formname' => 'plan5Form', 'amount' => '10000', 'productinfo' => 'Plan-Unlimited-Rs10000', 'udf2' => 1080, 'subname' => 'plan5']
+    ['formname' => 'plan1Form', 'amount' => '500', 'productinfo' => 'Plan-20-Rs500', 'udf2' => 30, 'udf3' => 20, 'subname' => 'plan1'],
+    ['formname' => 'plan2Form', 'amount' => '1000', 'productinfo' => 'Plan-50-Rs1000', 'udf2' => 90, 'udf3' => 50, 'subname' => 'plan2'],
+    ['formname' => 'plan3Form', 'amount' => '2000', 'productinfo' => 'Plan-100-Rs2000', 'udf2' => 180, 'udf3' => 100, 'subname' => 'plan3'],
+    ['formname' => 'plan4Form', 'amount' => '5000', 'productinfo' => 'Plan-200-Rs5000', 'udf2' => 270, 'udf3' => 200, 'subname' => 'plan4'],
+    ['formname' => 'plan5Form', 'amount' => '10000', 'productinfo' => 'Plan-Unlimited-Rs10000', 'udf2' => 1080, 'udf3' => 2000, 'subname' => 'plan5']
 ];
 
 foreach ($form as $val) {

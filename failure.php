@@ -13,14 +13,15 @@ $productinfo = $_POST["productinfo"];
 $email = $_POST["email"];
 $udf1 = $_POST['udf1'];
 $udf2 = $_POST['udf2'];
+$udf3 = $_POST['udf3'];
 $salt = "eCwWELxi"; // Your salt
 
 If (isset($_POST["additionalCharges"])) {
 
     $additionalCharges = $_POST["additionalCharges"];
-    $retHashSeq = $additionalCharges . '|' . $salt . '|' . $status . '||||||||||' . $udf2 . '|' . $udf1 . '' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
+    $retHashSeq = $additionalCharges . '|' . $salt . '|' . $status . '|||||||||' . $udf3 . '|' . $udf2 . '|' . $udf1 . '' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
 } else {
-    $retHashSeq = $salt . '|' . $status . '|||||||||' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
+    $retHashSeq = $salt . '|' . $status . '||||||||' . $udf3 . '|' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
 }
 
 $hash = hash("sha512", $retHashSeq);

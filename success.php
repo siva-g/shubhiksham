@@ -12,29 +12,29 @@ $productinfo = $_POST["productinfo"];
 $email = $_POST["email"];
 $udf1 = $_POST['udf1'];
 $udf2 = $_POST['udf2'];
+$udf3 = $_POST['udf3'];
 $salt = "eCwWELxi";
 
 If (isset($_POST["additionalCharges"])) {
     $additionalCharges = $_POST["additionalCharges"];
-    $retHashSeq = $additionalCharges . '|' . $salt . '|' . $status . '||||||||||' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
+    $retHashSeq = $additionalCharges . '|' . $salt . '|' . $status . '|||||||||' . $udf3 . '|' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
 } else {
-    $retHashSeq = $salt . '|' . $status . '||||||||||' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
+    $retHashSeq = $salt . '|' . $status . '|||||||||' . $udf3 . '|' . $udf2 . '|' . $udf1 . '|' . $email . '|' . $firstname . '|' . $productinfo . '|' . $amount . '|' . $txnid . '|' . $key;
 }
 
 $hash = hash("sha512", $retHashSeq);
 if ($hash != $posted_hash) {
     $msg->info("Invalid Transaction. Please try again", "index.php");
 } else {
-    $result = $db->query("SELECT sno FROM register_users WHERE email = '{$_POST['email']}' LIMIT 1");
-    $user = $result->fetch_assoc();
-
-    // Receive and sanitize input
+// Receive and sanitize input
     $user_id = mysqli_real_escape_string($db, $udf1);
+    $purchased_count = mysqli_real_escape_string($db, $udf3);
     $payu_status = mysqli_real_escape_string($db, $status);
     $amount = mysqli_real_escape_string($db, $amount);
     $txnid = mysqli_real_escape_string($db, $txnid);
     $created = date('Y-m-d H:i:s');
-    $sql = "INSERT INTO user_purchases (user_id,purchased_count,payu_status,amount,txnid,purchased_date) VALUES ('$user_id',20,'$payu_status','$amount','$txnid','$created')";
+    $exp_date = date('Y-m-d H:i:s', strtotime("+{$udf2} days"));
+    $sql = "INSERT INTO user_purchases (user_id,purchased_count,payu_status,amount,txnid,purchased_date,expiry_date) VALUES ('$user_id','$purchased_count','$payu_status','$amount','$txnid','$created','$exp_date')";
     $result1 = $db->query($sql);
     $succMsg = "Thank You. Your order status is " . $status . ".<br/>";
     $succMsg .= "Your Transaction ID for this transaction is " . $txnid . ".<br/>";
