@@ -23,6 +23,7 @@
 <script src="js/jquery.cubeportfolio.min.js"></script>
 <script src="js/google-code-prettify/prettify.js"></script>
 <script src="js/animate.js"></script>
+<script src="https://maps.google.com/maps/api/js?sensor=true&key=AIzaSyDvjEn6BNI4gQgfTG2s-t_QhUkeZ4l3MJk"></script>
 
 <script src="js/jquery-ui.js"></script>
 <script src="js/jquery.validate.js"></script>

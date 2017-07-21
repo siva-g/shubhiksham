@@ -74,7 +74,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <ul class="topleft-info">
-                                    <li><i class="fa fa-map-marker"></i> A7/1C Vasantha Malaigai | 80 Feet Road | Madurai-20</li>
+                                    <li><i class="fa fa-map-marker"></i> A7/1A Vasantha Maligai Apartment | Bata Showroom first floor | 80 Feet Road | KK Nagar | Madurai-20</li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
@@ -142,7 +142,7 @@
                                     <li>
                                         <a href="packages.php">Packages</a>
                                     </li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="contact.php">Contact</a></li>
                                 </ul>
                         </div>
                     </div>
