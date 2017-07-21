@@ -3,11 +3,18 @@ require './front_connection.php';
 /* * *********Above code default in all pages*********** */
 $isLoggedIn = false;
 
-$merchant_key = "gtKFFx";
-$salt = "eCwWELxi";
-$payu_base_url = "https://test.payu.in"; // For Test environment
+if (isset($_GET['testpay'])) {
+    $merchant_key = "gtKFFx";
+    $salt = "eCwWELxi";
+    $payu_base_url = "https://test.payu.in"; // For Test environment
+} else {
+    $merchant_key = "P7KTmxH1";
+    $salt = "eQMc9Uiiu4";
+    $payu_base_url = "https://secure.payu.in"; // For Live environment
+}
+
 $action = '';
-$currentDir = "http://{$_SERVER['SERVER_NAME']}/shubhiksham/";
+$currentDir = "http://{$_SERVER['SERVER_NAME']}/" . ($_SERVER['SERVER_NAME'] == "localhost" ? "shubhiksham/" : "");
 $posted = array();
 if (!empty($_POST)) {
     foreach ($_POST as $key => $value) {
@@ -25,7 +32,7 @@ if (empty($posted['txnid'])) {
 $hash = '';
 //$hashSequence = "udf10|udf9|udf8|udf7|udf6|udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key";
 $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-$formName = isset($_POST['plan1']) ? "plan1Form" : (isset($_POST['plan2']) ? "plan2Form" : (isset($_POST['plan3']) ? "plan3Form" : (isset($_POST['plan4']) ? "plan4Form" : (isset($_POST['plan5']) ? "plan5Form" : "dummyForm"))));
+$formName = isset($_POST['plan1']) ? "plan1Form" : (isset($_POST['plan2']) ? "plan2Form" : (isset($_POST['plan3']) ? "plan3Form" : (isset($_POST['plan4']) ? "plan4Form" : (isset($_POST['plantest']) ? "testForm" : "dummyForm"))));
 if (empty($posted['hash']) && sizeof($posted) > 0) {
     $hashVarsSeq = explode('|', $hashSequence);
     $hash_string = '';
@@ -54,7 +61,8 @@ $form = [
     ['formname' => 'plan2Form', 'amount' => '1000', 'productinfo' => 'Plan-50-Rs1000', 'udf2' => 90, 'udf3' => 50, 'subname' => 'plan2'],
     ['formname' => 'plan3Form', 'amount' => '2000', 'productinfo' => 'Plan-100-Rs2000', 'udf2' => 180, 'udf3' => 100, 'subname' => 'plan3'],
     ['formname' => 'plan4Form', 'amount' => '5000', 'productinfo' => 'Plan-200-Rs5000', 'udf2' => 270, 'udf3' => 200, 'subname' => 'plan4'],
-    ['formname' => 'plan5Form', 'amount' => '10000', 'productinfo' => 'Plan-Unlimited-Rs10000', 'udf2' => 1080, 'udf3' => 2000, 'subname' => 'plan5']
+    ['formname' => 'plan5Form', 'amount' => '10000', 'productinfo' => 'Plan-Unlimited-Rs10000', 'udf2' => 1080, 'udf3' => 2000, 'subname' => 'plan5'],
+    ['formname' => 'testForm', 'amount' => '1', 'productinfo' => 'Plan-test', 'udf2' => 30, 'udf3' => 20, 'subname' => 'plantest'],
 ];
 
 foreach ($form as $val) {
@@ -206,6 +214,29 @@ require 'header.php';
                     </div>
                 </div>
             </div>
+            <?php if (isset($_GET['testform'])) { ?>
+                <div class="col-lg-3">
+                    <div class="pricing-box-alt special">
+                        <div class="pricing-heading">
+                            <h3>Plan <strong>Test</strong></h3>
+                        </div>
+                        <div class="pricing-terms">
+                            <h6>&#8377; 1</h6>
+                        </div>
+                        <div class="pricing-content">
+                            <ul>
+                                <li><i class="icon-ok"></i>Search Profiles</li>
+                                <li><i class="icon-ok"></i>View Basic Details</li>
+                                <li>Get contact Details upto 20 Profiles</li>
+                                <li>Validity: 1 month</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-action">
+                            <?php echo $forms['testForm']; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </section>
