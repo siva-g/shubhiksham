@@ -31,7 +31,7 @@ if (empty($posted['txnid'])) {
 
 $hash = '';
 //$hashSequence = "udf10|udf9|udf8|udf7|udf6|udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key";
-$hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+$hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|||||";
 $formName = isset($_POST['plan1']) ? "plan1Form" : (isset($_POST['plan2']) ? "plan2Form" : (isset($_POST['plan3']) ? "plan3Form" : (isset($_POST['plan4']) ? "plan4Form" : (isset($_POST['plantest']) ? "testForm" : "dummyForm"))));
 if (empty($posted['hash']) && sizeof($posted) > 0) {
     $hashVarsSeq = explode('|', $hashSequence);
@@ -41,7 +41,10 @@ if (empty($posted['hash']) && sizeof($posted) > 0) {
         $hash_string .= '|';
     }
     $hash_string .= $salt;
+//    echo '<pre>' . $hash_string . '<br>';
     $hash = strtolower(hash('sha512', $hash_string));
+//    echo $hash;
+//    exit;
     $action = $payu_base_url . '/_payment';
 } elseif (!empty($posted['hash'])) {
     $hash = $posted['hash'];
@@ -67,7 +70,7 @@ $form = [
 
 foreach ($form as $val) {
     if ($isLoggedIn) {
-        $formInput = ['key' => $merchant_key, 'hash' => $hash, 'txnid' => $txnid, 'amount' => $val['amount'], 'productinfo' => $val['productinfo'], 'firstname' => $name, 'email' => $email, 'phone' => $phone, 'udf1' => $userid, 'udf2' => $val['udf2'], 'surl' => $currentDir . 'success.php', 'furl' => $currentDir . 'failure.php', 'curl' => $currentDir . 'cancel.php', 'service_provider' => ''];
+        $formInput = ['key' => $merchant_key, 'hash' => $hash, 'txnid' => $txnid, 'amount' => $val['amount'], 'productinfo' => $val['productinfo'], 'firstname' => $name, 'email' => $email, 'phoneNumber' => $phone, 'udf1' => $userid, 'udf2' => $val['udf2'], 'udf3' => $val['udf3'], 'surl' => $currentDir . 'success.php', 'furl' => $currentDir . 'failure.php', 'curl' => $currentDir . 'cancel.php', 'service_provider' => 'payu_paisa'];
         $forms[$val['formname']] = '<form action="' . $action . '" name="' . $val['formname'] . '" method="POST">';
         foreach ($formInput as $ikey => $ivalue) {
             $forms[$val['formname']] .= '<input type="hidden" name="' . $ikey . '" value="' . $ivalue . '" />';
